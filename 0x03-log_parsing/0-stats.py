@@ -22,6 +22,7 @@ status_codes = {
     "500": 0
 }
 
+
 def print_stats(file_size, status_codes):
     """
     Print the total file size and status codes counts.
@@ -31,6 +32,7 @@ def print_stats(file_size, status_codes):
         if v > 0:
             print(f"{k}: {v}")
 
+
 def exit_handler(sig, frame):
     """
     Handle the exit signal (SIGINT).
@@ -38,19 +40,22 @@ def exit_handler(sig, frame):
     print_stats(total_f_size, status_codes)
     sys.exit(0)
 
+
 # Register the signal handler
 signal.signal(signal.SIGINT, exit_handler)
+
 
 try:
     for line in sys.stdin:
         line = line.strip()
-        parsed_line = parsed_line[::-1] # Reverses the list of components.
+        parsed_line = parsed_line[::-1]  # Reverses the list of components.
+
         if len(parsed_line) > 2:
             counter += 1
             if counter <= 10:
                 total_f_size += int(parsed_line[0])
                 status_code = parsed_line[1]
-                
+
                 if (status_code in status_codes.keys()):
                     status_codes[status_code] += 1
             if counter == 10:
