@@ -23,11 +23,11 @@ status_codes = {
 }
 
 
-def print_stats(file_size, status_codes):
+def print_stats(status_codes, total_f_size):
     """
     Print the total file size and status codes counts.
     """
-    print(f"File size: {file_size}")
+    print(f"File size: {total_f_size}")
     for k, v in sorted(status_codes.items()):
         if v > 0:
             print(f"{k}: {v}")
@@ -47,11 +47,12 @@ signal.signal(signal.SIGINT, exit_handler)
 
 try:
     for line in sys.stdin:
-        line = line.strip()
+        parsed_line = line.split()
         parsed_line = parsed_line[::-1]  # Reverses the list of components.
 
         if len(parsed_line) > 2:
             counter += 1
+
             if counter <= 10:
                 total_f_size += int(parsed_line[0])
                 status_code = parsed_line[1]
@@ -59,7 +60,7 @@ try:
                 if (status_code in status_codes.keys()):
                     status_codes[status_code] += 1
             if counter == 10:
-                print_stats(total_f_size, status_codes)
+                print_stats(status_codes, total_f_size)
                 counter = 0
 finally:
-    print_stats(total_f_size, status_codes)
+    print_stats(status_codes, total_f_size)
