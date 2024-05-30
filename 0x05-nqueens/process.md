@@ -63,7 +63,7 @@ Lets breakdown the script:
                 col.remove(i)
                 pos.remove(row + i)
                 neg.remove(row - i)
-                board[row] = [row, 0]
+                board[row] = []
 
                 solve(0)
                 return final_result
