@@ -21,41 +21,48 @@ if N < 4:
 
 
 def solveNQueens(n):
-    '''
-    Solve the N queens problem
-    '''
+    """Solution for n queens"""
     col = set()
     pos = set()
     neg = set()
 
-    final_result = []
-    board = [[] for n in range(n)]
+    final_results = []
+
+    board = [[] for n in range(n)]  # create empy board
 
     def solve(row):
-        '''recursive function to solve the n queens problem'''
+        """function for recursion"""
+        # means we've reached the last row
         if row == n:
-            '''base case'''
-            final_result.append(board.copy())
+            # get copy of current solution(current board)
+            final_results.append(board.copy())
             return
+
+        # for every column
         for i in range(n):
+            # if we find that the column or diagonals are used, then skip
             if i in col or (row + i) in pos or (row - i) in neg:
                 continue
 
+            # register found columns and diagonals
             col.add(i)
             pos.add(row + i)
             neg.add(row - i)
 
             board[row] = [row, i]
 
+            # move to next row
             solve(row + 1)
 
+            # finally undo
             col.remove(i)
             pos.remove(row + i)
             neg.remove(row - i)
             board[row] = []
 
     solve(0)
-    return final_result
+
+    return final_results
 
 
 if __name__ == '__main__':
