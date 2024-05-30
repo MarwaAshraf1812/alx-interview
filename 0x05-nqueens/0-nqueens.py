@@ -1,59 +1,64 @@
 #!/usr/bin/python3
-"""
-N-Queens problem solver using backtracking.
-"""
-
-
+'''
+Module 0-nqueens
+A program that solves the N queens problem
+'''
 import sys
 
 
-def nqueens_helper(n, y, board):
-    """
-    Helper function for N-Queens backtracking.
-    """
-    for i in range(n):
-        held = 0
-        for j in board:
-            # Check if the queen can be placed in the current position
-            if i == j[1] or abs(i - j[1]) == abs(y - j[0]):
-                held = 1
-                break
-        if held == 0:
-            board.append([y, i])
-            if y == n - 1:
-                # If the last row is reached, print the solution
-                print(board)
-            else:
-                # Continue placing queens in the next row
-                nqueens_helper(n, y + 1, board)
-            board.pop()  # Backtrack: remove the last queen placement
+if len(sys.argv) != 2:
+    print('Usage: nqueens N')
+    sys.exit(1)
+
+try:
+    N = int(sys.argv[1])
+except ValueError:
+    print('N must be a number')
+    sys.exit(1)
+if N < 4:
+    print('N must be at least 4')
+    sys.exit(1)
 
 
-def nqueens(n):
-    """
-    Solve the N-Queens problem for a chessboard of size n x n.
-    """
-    board = []
-    nqueens_helper(n, 0, board)
+def solveNQueens(n):
+    '''
+    Solve the N queens problem
+    '''
+    col = set()
+    pos = set()
+    neg = set()
+
+    final_result = []
+    board = [[] for n in range(n)]
+
+    def solve(row):
+        '''recursive function to solve the n queens problem'''
+        if row == n:
+            '''base case'''
+            final_result.append(board.copy())
+            return
+        for i in range(n):
+            if i in col or (row + i) in pos or (row - i) in neg:
+                continue
+
+            col.add(i)
+            pos.add(row + i)
+            neg.add(row - i)
+
+            board[row] = [row, i]
+
+            solve(row + 1)
+
+            col.remove(i)
+            pos.remove(row + i)
+            neg.remove(row - i)
+            board[row] = []
+
+    solve(0)
+    return final_result
 
 
-def main():
-    """
-    Main function to handle command-line input and call N-Queens solver.
-    """
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        exit(1)
-    try:
-        n = int(sys.argv[1])
-    except ValueError:
-        print("N must be a number")
-        exit(1)
-    if n < 4:
-        print("N must be at least 4")
-        exit(1)
-    nqueens(n)
-
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    result_boards = solveNQueens(N)
+    for board in result_boards:
+        print(board)
